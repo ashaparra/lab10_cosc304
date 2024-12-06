@@ -28,11 +28,9 @@ try
 	{
 		out.println("ClassNotFoundException: " +e);
 	}
-
-	String url = "jdbc:sqlserver://cosc304_sqlserver:1433;DatabaseName=orders;TrustServerCertificate=True";
-	String uid = "sa";
-	String pw = "304#sa#pw";
-	
+	String url = "jdbc:sqlserver://cosc-304-18.cv8agos8ieeu.us-east-2.rds.amazonaws.com:1433;databaseName=orders;encrypt=true;trustServerCertificate=true";
+	String uid = "admin";
+	String pw = "Ashanat.37";
 	try (Connection con = DriverManager.getConnection(url, uid, pw)){
 			ResultSet rs;
 			// Determine if valid customer id was entered
