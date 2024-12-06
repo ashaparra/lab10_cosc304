@@ -3,10 +3,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF8"%>
 <%@ include file="jdbc.jsp" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Velart Order List</title>
     <link rel="stylesheet" href="css/listOrder.css">
 </head>
@@ -14,26 +12,13 @@
     <div class="container">
         <h1>Order List</h1>
         <%
-            // SQL Server connection details
-            String url = "jdbc:sqlserver://cosc-304-18.cv8agos8ieeu.us-east-2.rds.amazonaws.com:1433;databaseName=orders;encrypt=true;trustServerCertificate=true";
-            String uid = "admin";
-            String pw = "Ashanat.37";
-
             try {
-                // Load the SQL Server driver class
-                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            } catch (ClassNotFoundException e) {
-                out.println("ClassNotFoundException: " + e);
-            }
-
-            try (Connection con = DriverManager.getConnection(url, uid, pw);
-                 Statement stmt = con.createStatement();) {
-                // Query to retrieve order summary details
-                ResultSet rst = stmt.executeQuery(
-                    "SELECT orderId, orderDate, totalAmount, ordersummary.customerId, firstName, lastName " +
-                    "FROM ordersummary " +
-                    "JOIN customer ON ordersummary.customerId = customer.customerId"
-                );
+                int customerId = (int) session.getAttribute("customerId");
+                getConnection();
+                String SQL0 = "SELECT orderId, orderDate, totalAmount, ordersummary.customerId, firstName, lastName FROM ordersummary JOIN customer ON ordersummary.customerId = customer.customerId WHERE customer.customerId = ?";
+                PreparedStatement pstmt0 = con.prepareStatement(SQL0);
+                pstmt0.setInt(1, customerId);
+                ResultSet rst = pstmt0.executeQuery();
         %>
         <table class="order-table">
             <thead>
@@ -50,8 +35,6 @@
                     while (rst.next()) {
                         NumberFormat currFormat = NumberFormat.getCurrencyInstance();
                         int orderId = rst.getInt("orderId");
-
-                        // Query to retrieve products in the order
                         String SQL = "SELECT productId, quantity, price FROM orderproduct WHERE orderId = ?";
                         PreparedStatement pstmt = con.prepareStatement(SQL);
                         pstmt.setInt(1, orderId);
