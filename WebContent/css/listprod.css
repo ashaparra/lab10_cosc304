@@ -168,3 +168,10 @@ html, body {
     font-size: 14px; 
     margin-right: 5px; 
 }
+
+.divider {
+    height: 30px; 
+    width: 3px; 
+    background-color: black;
+    margin: 0 20px; 
+}

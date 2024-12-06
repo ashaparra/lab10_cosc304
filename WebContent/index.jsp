@@ -42,6 +42,7 @@
 		<h2 style="padding-top: 100px;"><a href="listprod.jsp" class="menu">Begin Shopping</a></h2>
 		<h2 style="padding-top: 30px;""><a href="listorder.jsp" class="menu">List All Orders</a></h2>
 		<h2 style="padding-top: 30px;""><a href="admin.jsp" class="menu">Administrators</a></h2>
+		<h2 style="padding-top: 30px;""><a href="createAccount.jsp" class="menu">Create account</a></h2>
 	  </div>
 	  <div class="col">
 		<img src="resources/Logo.png" style="max-width:100%">
