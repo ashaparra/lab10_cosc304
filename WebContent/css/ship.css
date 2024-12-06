@@ -1,0 +1,117 @@
+html, body {
+    margin: 0; 
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Anka/Coder', monospace;
+    display: flex; 
+    flex-direction: column; 
+    height: 100%;
+}
+
+#nav {
+    grid-area: nav;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    background-color: #E2EBD7;
+    border-radius: 5px;
+    margin: 0;
+    padding: 0;
+  }
+  
+#nav ul {
+    display: flex; 
+    align-items: center;
+    list-style-type: none;
+    margin: 0px; 
+    padding: 0;
+    width: 100%;
+  
+}
+
+.right-items {
+    display: flex; 
+    align-items: center; 
+    margin-right: 5px;
+}
+
+#nav a {
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+#nav ul li {
+    margin: 0; /* Remove all margins from list items */
+    padding: 0; /* Ensure no padding is applied */
+}
+
+#nav ul li a:hover {
+    color: #618244;
+}
+
+footer {
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    background-color: #E2EBD7;
+    border-radius: 5px; 
+    padding: 5px; 
+    gap: 2px;
+}
+
+.back-to-top {
+    text-decoration: none; 
+    color: black;
+    font-weight: bold; 
+}
+
+.back-to-top:hover {
+    color: #45a049;
+}
+
+.message {
+    margin-top: 20px; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    margin-left:10px;
+    margin-bottom: 20px;
+    align-items: flex-end;
+    text-align: center;
+    width: 75%;
+}
+.error {
+    margin-top: 40px;
+    color: red;
+    background-color: #ffe6e6;
+    border-color: red;
+
+}
+.success {
+    color: green;
+    background-color: #e6ffe6;
+    border-color: green;
+}
+
+.main-container{
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 20px;
+    width: 100%; 
+    flex-direction: column;}
+
+table {
+    border-collapse: collapse; 
+    width: 80%; 
+    text-align: center;
+    margin: auto; 
+    text-align: center;
+    margin: auto;
+}
