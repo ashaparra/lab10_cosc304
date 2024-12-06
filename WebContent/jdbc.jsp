@@ -10,12 +10,13 @@ Public methods:
 
 <%!
 	// User id, password, and server information
-	private String url = "jdbc:sqlserver://cosc304_sqlserver:1433;DatabaseName=orders;TrustServerCertificate=True";
-	private String uid = "sa";
-	private String pw = "304#sa#pw";
+	private String url = "jdbc:sqlserver://cosc-304-18.cv8agos8ieeu.us-east-2.rds.amazonaws.com:1433;databaseName=orders;trustServerCertificate=true";
+	private String uid = "admin";
+	private String pw = "Ashanat.37";
 	
 	// Do not modify this url
-	private String urlForLoadData = "jdbc:sqlserver://cosc304_sqlserver:1433;TrustServerCertificate=True";
+	private String urlForLoadData = "jdbc:sqlserver://cosc-304-18.cv8agos8ieeu.us-east-2.rds.amazonaws.com:1433;databaseName=orders;trustServerCertificate=true";
+
 	
 	// Connectionx
 	private Connection con = null;
