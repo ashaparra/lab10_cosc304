@@ -62,6 +62,7 @@ else
 			out.println("Expected product with four entries. Got: "+product);
 			continue;
 		}
+		String productId = (String) product.get(0); 
 %>
 
 		<tr>
@@ -100,7 +101,13 @@ else
 %>
 		<td align="right"><%=currFormat.format(pr)%></td>
 		<td align="right"><%=currFormat.format(pr*qty)%></td>
+		<td align="center">
+			<a href="removeitem.jsp?productId=<%=productId%>">
+				<img src="resources/trash.png" alt="Remove Item" style="width: 30px; height: auto; border-radius: 5px;">
+			</a>
+		</td>
 		</tr>
+		
 		
 <%
 		total = total +pr*qty;
