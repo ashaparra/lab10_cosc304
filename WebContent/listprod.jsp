@@ -8,8 +8,16 @@
 	<head>
 		<title>Velart</title>
 		<link type="text/css" rel="stylesheet" href="css/listprod.css">
-
-
+		<script>
+			function toggleForm() {
+				const formContainer = document.getElementById('product-add-container');
+				if (formContainer.style.display === 'none' || formContainer.style.display === '') {
+					formContainer.style.display = 'block';
+				} else {
+					formContainer.style.display = 'none';
+				}
+			}
+		</script>
 	</head>
 	<body>
 		<div>
@@ -32,10 +40,65 @@
 			</header>
 		</div>
 		<div class="title-search-container">
-			<div>
-				<h1 style="margin-left:10px; margin-top:50px;">All Products</h1>
-				<p style="margin-left:10px; color: #888; font-size: 1rem;">Ordered by most popular product</p>
+			<div class="title-search-container">
+				<div>
+					<h1>All Products</h1>
+					<p>Ordered by most popular product</p>
+					<div style="margin-top: 20px;">
+					<button onclick="toggleForm()" style="background-color: #618244; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px;">
+						Add New Product
+					</button>
+				</div>
+				</div>
 			</div>
+			<div id="product-add-container" class="card" style="display: none; max-width: 500px; margin: 20px auto; padding: 20px;">
+				<h2>Add New Product</h2>
+				<form action="saveprod.jsp" method="post">
+					<div style="margin-bottom: 10px;">
+						<label for="productName">Product Name:</label>
+						<input type="text" id="productName" name="productName" required style="width: 100%; padding: 8px;">
+					</div>
+					<div style="margin-bottom: 10px;">
+						<label for="productPrice">Price:</label>
+						<input type="number" id="productPrice" name="productPrice" step="0.01" required style="width: 100%; padding: 8px;">
+					</div>
+					<div style="margin-bottom: 10px;">
+						<label for="productdesc">Product description:</label>
+						<input type="text" id="productDesc" name="productDesc" step="0.01" required style="width: 100%; padding: 8px;">
+					</div>
+					<div style="margin-bottom: 10px;">
+						<label for="productCategory">Category:</label>
+						<select id="productCategory" name="productCategory" required style="width: 100%; padding: 8px;">
+							<option value="">Select Category</option>
+							<%
+								try {
+									getConnection();
+									Statement stmt = con.createStatement();
+									ResultSet rs = stmt.executeQuery("SELECT categoryId, categoryName FROM category");
+									while (rs.next()) {
+										int categoryId = rs.getInt("categoryId");
+										String categoryName = rs.getString("categoryName");
+							%>
+							<option value="<%= categoryId %>"><%= categoryName %></option>
+							<%
+									}
+									rs.close();
+								} catch (SQLException ex) {
+									out.println("<p>Error: " + ex.getMessage() + "</p>");
+								} finally {
+									closeConnection();
+								}
+							%>
+						</select>
+					</div>
+					<div style="margin-bottom: 10px;">
+						<label for="productImage">Product Image:</label>
+						<input type="file" id="productImage" name="productImage" accept="image/*" required style="width: 100%; padding: 8px;">
+					</div>
+					<button type="submit" style="background-color: #618244; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Submit</button>
+				</form>
+			</div>
+          
 			<div class="form-container" style="align-items: start; text-align: left; width: 35%;">
 				<h2 style="margin-left: 10px; color:#618244;">Search for products</h2>
 				<form method="get" action="listprod.jsp" style="margin-left: 10px;">
@@ -55,7 +118,6 @@
 						font-family: 'Anka/Coder', monospace;">
 							<option value="">All Categories</option>
 							<%
-								// Get all categories from the database
 								try {
 									getConnection();
 									Statement stmt = con.createStatement();
