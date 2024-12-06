@@ -16,5 +16,6 @@
 
     session.setAttribute("productList", productList);
 
+    // Redirect back to the shopping cart page
     response.sendRedirect("showcart.jsp");
 %>

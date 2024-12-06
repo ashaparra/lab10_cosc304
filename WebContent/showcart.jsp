@@ -138,6 +138,18 @@ else
 		
 }
 %>
+<%
+String message = (String) session.getAttribute("message");
+if (message != null) {
+%>
+    <div style="color: red; text-align: center; margin: 10px;">
+        <%= message %>
+    </div>
+<%
+    // Clear the message after displaying it
+    session.removeAttribute("message");
+}
+%>
 </div>
 <div class="footer-section">
 	<footer>
