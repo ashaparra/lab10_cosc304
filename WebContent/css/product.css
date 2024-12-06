@@ -1,0 +1,125 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Anka/Coder', monospace;
+}
+
+#nav {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    background-color: #d6dfce;
+    border-radius: 5px;
+    margin: 0;
+    padding: 0;
+}
+
+#nav ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#nav a {
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+#nav ul li a:hover {
+    color: #618244;
+}
+
+/* Product Details Layout */
+.product-details-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.left-column img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.right-column {
+    max-width: 50%;
+    text-align: left;
+}
+
+
+a.add-to-cart-link,
+a.continue-shopping-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 400px; 
+    height: 100px; 
+    margin: 0px auto; 
+    padding: 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+}
+
+a.add-to-cart-link:hover,
+a.continue-shopping-link:hover {
+    transform: translateY(-5px); /* Adds a hover movement */
+}
+
+a.add-to-cart-link img,
+a.continue-shopping-link img {
+    max-width: 80%; /* Ensure icons resize properly */
+    height: auto;
+}
+
+footer {
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+    background-color: #E2EBD7;
+    border-radius: 5px; 
+    padding: 5px; 
+    gap: 2px;
+}
+
+.back-to-top {
+    text-decoration: none; 
+    color: black;
+    font-weight: bold;
+}
+
+.back-to-top:hover {
+    color: #45a049;
+}
+
+/* Hover effect for Add to Cart Icon */
+.add-to-cart-icon {
+    width: 80%; 
+    height: auto; 
+    margin-top: 10px; 
+    cursor: pointer; 
+    align-items: center;
+    justify-content: center; 
+}
+
+.add-to-cart-icon:hover {
+     transform: translateY(-5px);
+}

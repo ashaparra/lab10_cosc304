@@ -41,6 +41,7 @@ else
 	<h1 style='color:#618244'>Your Shopping Cart</h1>
 </div>
 <div style="justify-items:center; flex: 1;">
+	<form action="updatecart.jsp" method="post">
 	<table style="border-spacing: 10px; ">
 		<tr>
 			<th>Product Id</th>
@@ -61,12 +62,15 @@ else
 			out.println("Expected product with four entries. Got: "+product);
 			continue;
 		}
+		String productId = (String) product.get(0); 
 %>
 
 		<tr>
 			<td><%= product.get(0) %></td>
 			<td><%= product.get(1) %></td>
-			<td align="center"><%= product.get(3) %></td>
+			<td align="center">
+				<input type="number" name="quantity_<%= product.get(0) %>" value="<%= product.get(3) %>" min="0" style="width: 50px;">
+			</td>
 		
 <% 
 		Object price = product.get(2);
@@ -97,7 +101,13 @@ else
 %>
 		<td align="right"><%=currFormat.format(pr)%></td>
 		<td align="right"><%=currFormat.format(pr*qty)%></td>
+		<td align="center">
+			<a href="removeitem.jsp?productId=<%=productId%>">
+				<img src="resources/trash.png" alt="Remove Item" style="width: 30px; height: auto; border-radius: 5px;">
+			</a>
+		</td>
 		</tr>
+		
 		
 <%
 		total = total +pr*qty;
@@ -108,8 +118,15 @@ else
 			<td colspan="4" align="right"><b style='color:#618244'>Order Total</b></td>
 			<td align="right"><%=currFormat.format(total)%></td>
 		</tr>
+		<td colspan="5" align="right">
+        <form action="updatecart.jsp" method="post" style="margin: 0; display: inline-block;">
+            <input type="image" src="resources/updatecart.png" alt="Update Cart" style="width: 150px; height: auto; border-radius: 5px; cursor: pointer;">
+        </form>
+    </td>
+</tr>
 	</table>
-	<div style="margin-top: 20px;">
+	</form>
+
 		<a href='checkout.jsp' style='display: inline-block; padding: 10px 20px; margin: 10px; text-align: center;'>
 			<img src='resources/checkout.png' alt='Check Out' style='width: 150px; height: auto; border-radius: 5px;'>
 		</a>
@@ -119,6 +136,18 @@ else
 	</div>
 <%
 		
+}
+%>
+<%
+String message = (String) session.getAttribute("message");
+if (message != null) {
+%>
+    <div style="color: red; text-align: center; margin: 10px;">
+        <%= message %>
+    </div>
+<%
+    // Clear the message after displaying it
+    session.removeAttribute("message");
 }
 %>
 </div>

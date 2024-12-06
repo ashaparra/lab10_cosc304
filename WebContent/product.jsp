@@ -6,8 +6,8 @@
 
 <html>
     <head>
-        <title>Ray's Grocery - Product Information</title>
-        <link href="css/listprod.css" rel="stylesheet">
+        <title>Velart- Product Information</title>
+        <link href="css/product.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
@@ -22,13 +22,14 @@
         try {
             getConnection();
         String getproductId = request.getParameter("id");
-            String SQL = "SELECT productId, productName, productPrice, productImage, productImageURL FROM product WHERE productId = ?";
+            String SQL = "SELECT productId, productName, productDesc,productPrice, productImage, productImageURL FROM product WHERE productId = ?";
             pstmt = con.prepareStatement(SQL);
                                 pstmt.setString(1,getproductId);
                                 rs = pstmt.executeQuery();
                 if(rs.next()){
                     String productId = rs.getString("productId");
                     String productName = rs.getString("productName");
+                    String productDesc = rs.getString("productDesc");
                     String productPrice = rs.getBigDecimal("productPrice").toString();
                     NumberFormat currFormat = NumberFormat.getCurrencyInstance(); 
                     String productImageURL = rs.getString("productImageURL");
@@ -36,6 +37,7 @@
                         productImageURL = "resources/Logo.png";
                     }
                     byte[] productImage = rs.getBytes("productImage");
+                
                     
         %>
         <main style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; overflow-y: auto;"">
@@ -56,13 +58,18 @@
                 %>
               </div>
               <div class="col">
-                <h4 style="margin-top: 20%;"><b><%=productName%></b></h4>
-                <p style="margin-top: 10%;">Price: <%= currFormat.format(rs.getBigDecimal("productPrice")) %></p> 
-                <a href="addcart.jsp?id=<%=productId%>&name=<%=productName%>&price=<%=productPrice%>" style="display:flex; align-items:center;justify-content:center; margin-bottom: 10px;">
-                <img src="resources/button.png" alt="Add to Cart" class="add-to-cart-icon" style="width: 50%;"></a>
-                <a href='listprod.jsp' style='display: inline-block; padding: 10px 20px; margin: 10px; text-align: center;'>
-                <img src='resources/continue.png' alt='Continue Shopping' style='width: 100%; height: auto; border-radius: 5px;'>
-                </a>
+                <h2 style="margin-top: 20%;"><b><%=productName%></b></h2>
+                <p style="margin-top: 5%;"><%=productDesc%></p>
+                <p style="margin-top: 5%;">Price: <%= currFormat.format(rs.getBigDecimal("productPrice")) %></p> 
+                <a href="addcart.jsp?id=<%=productId%>&name=<%=productName%>&price=<%=productPrice%>" 
+                    class="add-to-cart-link">
+                     <img src="resources/button.png" alt="Add to Cart">
+                 </a>
+                 
+                 <a href="listprod.jsp" 
+                    class="continue-shopping-link">
+                     <img src="resources/continue.png" alt="Continue Shopping">
+                 </a>
               </div>
             </div>
           </div>
