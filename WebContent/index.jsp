@@ -40,9 +40,31 @@
 	<div class="row">
 	  <div class="col">
 		<h2 style="padding-top: 100px;"><a href="listprod.jsp" class="menu">Begin Shopping</a></h2>
+		<%
+			Integer admin = (Integer) session.getAttribute("isAdmin");
+			if (userName != null && admin == 1){
+		%>
 		<h2 style="padding-top: 30px;""><a href="listorder.jsp" class="menu">List All Orders</a></h2>
-		<h2 style="padding-top: 30px;""><a href="admin.jsp" class="menu">Administrators</a></h2>
-		<h2 style="padding-top: 30px;""><a href="createAccount.jsp" class="menu">Create account</a></h2>
+		<%
+			}
+			if (admin != null && admin == 1){
+		%>
+			<h2 style="padding-top: 30px;""><a href="admin.jsp" class="menu">Administrators</a></h2>
+		<%
+			}
+			
+			if (userName == null){
+		%>
+			<h2 style="padding-top: 30px;""><a href="createAccount.jsp" class="menu">Create account</a></h2>
+		<%
+			}
+		if (userName != null && (admin == null || admin == 0)){
+		%>
+		<h2 style="padding-top: 30px;""><a href="listMyorder.jsp" class="menu">List My Orders</a></h2>
+		<%
+		}
+		%>
+		
 	  </div>
 	  <div class="col">
 		<img src="resources/Logo.png" style="max-width:100%">

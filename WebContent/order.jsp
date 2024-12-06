@@ -16,7 +16,18 @@
 
 <% 
 // Get customer id
-String custId = request.getParameter("customerId");
+int custId = Integer.parseInt(request.getParameter("customerId"));
+String custAddress = request.getParameter("address");
+String custCity = request.getParameter("city");
+String custState = request.getParameter("state");
+String custPostalCode = request.getParameter("postalCode");
+String custCountry = request.getParameter("country");
+String paymentType = request.getParameter("paymentType");
+String paymentNumber = request.getParameter("paymentNumber");
+String expiryMonth = request.getParameter("expiryMonth");
+String expiryYear = request.getParameter("expiryYear");
+String paymentExpiryDate = expiryYear + "-" + String.format("%02d", Integer.parseInt(expiryMonth)) + "-01";
+
 @SuppressWarnings({"unchecked"})
 HashMap<String, ArrayList<Object>> productList = (HashMap<String, ArrayList<Object>>) session.getAttribute("productList");
 
@@ -36,7 +47,8 @@ try
 			// Determine if valid customer id was entered
 			String SQL = "SELECT * FROM customer WHERE customerId = ?";
 			PreparedStatement pstmt = con.prepareStatement(SQL);
-			pstmt.setString(1,custId);
+			pstmt.setInt(1,custId);
+
 			rs = pstmt.executeQuery();
 			if(rs.next()){
 				// Determine if there are products in the shopping cart
@@ -55,13 +67,39 @@ try
 				<body>Please enter a valid customer id</body>
 <%
 			}
+			try {
+				// Insert payment details into the paymentmethod table
+				String SQL1 = "INSERT INTO paymentmethod (paymentType, paymentNumber, paymentExpiryDate, customerId) VALUES (?, ?, ?, ?)";
+				PreparedStatement pstmt1 = con.prepareStatement(SQL1);
+				pstmt1.setString(1, paymentType);
+				pstmt1.setString(2, paymentNumber);
+				pstmt1.setString(3, paymentExpiryDate);
+				pstmt1.setInt(4, custId);
+				pstmt1.executeUpdate();
+		
+				// Use out.println to display debug information
+				out.println("<h3>Payment Details Debug Info:</h3>");
+				out.println("<p>Payment Type: " + paymentType + "</p>");
+				out.println("<p>Payment Number " + paymentNumber + "</p>");
+				out.println("<p>Payment Expiry Date: " + paymentExpiryDate + "</p>");
+		
+			} catch (SQLException e) {
+				// Log error to the JSP page
+				out.println("<p>Error inserting payment details: " + e.getMessage() + "</p>");
+			}
+			
 		
 		// Save order information to database
-		String SQL2 = "INSERT INTO ordersummary (customerId, orderDate) VALUES (?,?)";
+		String SQL2 = "INSERT INTO ordersummary (customerId, orderDate, shiptoAddress,shiptoCity,shiptoState,shiptoPostalCode, shiptoCountry) VALUES (?,?,?,?,?,?,?)";
 		PreparedStatement pstmt2 = con.prepareStatement(SQL2,Statement.RETURN_GENERATED_KEYS);
-		pstmt2.setString(1,custId);
+		pstmt2.setInt(1,custId);
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		pstmt2.setTimestamp(2,timestamp);
+		pstmt2.setString(3,custAddress);
+		pstmt2.setString(4,custCity);
+		pstmt2.setString(5,custState);
+		pstmt2.setString(6,custPostalCode);
+		pstmt2.setString(7,custCountry);
 		pstmt2.executeUpdate();
 	
 		ResultSet keys = pstmt2.getGeneratedKeys();
