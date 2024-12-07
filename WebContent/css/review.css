@@ -1,0 +1,152 @@
+html, body {
+    margin: 0; 
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Anka/Coder', monospace;
+}
+
+#nav {
+    grid-area: nav;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    background-color: #d6dfce;
+    border-radius: 5px;
+    margin: 0;
+    padding: 0;
+  }
+  
+#nav ul {
+    display: flex; 
+    align-items: center;
+    list-style-type: none;
+    margin: 0px; 
+    padding: 0;
+    width: 100%;
+  
+}
+
+.right-items {
+    display: flex; 
+    align-items: center; 
+    margin-right: 5px;
+}
+
+#nav a {
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+#nav ul li {
+    margin: 0;
+    padding: 0; 
+}
+
+#nav ul li a:hover {
+    color: #618244;
+}
+
+/* Review Container */
+.review-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    margin-top: 100px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.product-title {
+    font-size: 1.8rem;
+    color: #618244;
+    margin-bottom: 20px;
+}
+/* Star Rating */
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse; /* Right to left */
+    justify-content: center;
+    gap: 10px; /* Space between stars */
+}
+
+.star-rating input {
+    display: none; /* Hide radio buttons */
+}
+
+.star-rating label {
+    font-size: 3rem; /* Make stars bigger */
+    color: #ccc; /* Default star color (gray) */
+    cursor: pointer;
+    transition: color 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #618244; /* Highlight selected stars in green */
+    transform: scale(1.2); /* Slight zoom effect on hover */
+}
+
+
+/* Comment Section */
+.comment-section {
+    margin: 20px 0;
+    text-align: left;
+}
+
+.comment-section label {
+    font-size: 1rem;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.comment-section textarea {
+    width: 97%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: 'Anka/Coder', monospace;
+    font-size: 1rem;
+    resize: none;
+}
+
+/* Submit Button */
+.submit-section {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.btn-submit {
+    background-color: #618244;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #45a049;
+}
+
+/* Footer */
+.footer-section {
+    text-align: center;
+    padding: 10px;
+    background-color: #E2EBD7;
+    border-radius: 5px;
+    margin-top: 130px;
+    font-size: 0.9rem;
+    color: #333;
+}
