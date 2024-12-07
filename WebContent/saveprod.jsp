@@ -1,25 +1,41 @@
-<%@ page import="java.sql.*" %>
-<%@ page import="java.text.NumberFormat" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF8"%>
-<%@ include file="jdbc.jsp" %>
+<%@ page import="java.util.Base64" %>
 <%
-String getproductname = request.getParameter("productName");
-String getproductprice = request.getParameter("productPrice");
-String getproductdesc = request.getParameter("productDesc");
-String getproductcategory = request.getParameter("productCategory");
+    response.setContentType("application/json");
+    String productName = request.getParameter("productName");
+    String productPrice = request.getParameter("productPrice");
+    String productDesc = request.getParameter("productDesc");
+    String productCategory = request.getParameter("productCategory");
+    byte[] productImage = null;
 
+    try {
+        Part filePart = request.getPart("productImage");
+        if (filePart != null) {
+            InputStream fileContent = filePart.getInputStream();
+            productImage = fileContent.readAllBytes();
+        }
 
-try {
-    getConnection();
-    String SQL = "INSERT INTO product (productName, productPrice, productDesc, categoryId) VALUES (?, ?, ?,?)";
-    PreparedStatement pstmt = con.prepareStatement(SQL);
-    pstmt.setString(1, getproductname);
-    pstmt.setString(2, getproductprice);
-    pstmt.setString(3, getproductdesc);
-    pstmt.setString(4, getproductcategory);
-    pstmt.executeUpdate();
-    con.close();
-} catch (Exception e) {
-    out.println("Error: " + e);
-}
-%>  
+        getConnection();
+        String SQL = "INSERT INTO product (productName, productPrice, productImage, productDesc, categoryId) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+        pstmt.setString(1, productName);
+        pstmt.setBigDecimal(2, new BigDecimal(productPrice));
+        pstmt.setBytes(3, productImage);
+        pstmt.setString(4, productDesc);
+        pstmt.setInt(5, Integer.parseInt(productCategory));
+        pstmt.executeUpdate();
+
+        ResultSet generatedKeys = pstmt.getGeneratedKeys();
+        int productId = 0;
+        if (generatedKeys.next()) {
+            productId = generatedKeys.getInt(1);
+        }
+
+        String base64Image = Base64.getEncoder().encodeToString(productImage);
+        out.print("{\"productId\": \"" + productId + "\", \"productName\": \"" + productName + "\", \"productPrice\": \"" + productPrice + "\", \"productImage\": \"" + base64Image + "\"}");
+    } catch (Exception e) {
+        response.setStatus(500);
+        out.print("{\"error\": \"" + e.getMessage() + "\"}");
+    } finally {
+        closeConnection();
+    }
+%>
