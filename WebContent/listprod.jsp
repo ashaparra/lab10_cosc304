@@ -44,16 +44,22 @@
 				<div>
 					<h1>All Products</h1>
 					<p>Ordered by most popular product</p>
+					<% 
+						Integer isAdmin = (Integer) session.getAttribute("isAdmin"); // Retrieve the isAdmin attribute
+						if (isAdmin != null && isAdmin == 1) { // Check if the user is an admin
+					%>
 					<div style="margin-top: 20px;">
-					<button onclick="toggleForm()" style="background-color: #618244; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px;">
-						Add New Product
-					</button>
+						<button id="editToggleBtn" onclick="toggleEditMode()" style="background-color: #618244;; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-size: 16px;">
+							Edit
+						</button>
+
 				</div>
+				<% } %>
 				</div>
 			</div>
 			<div id="product-add-container" class="card" style="display: none; max-width: 500px; margin: 20px auto; padding: 20px;">
 				<h2>Add New Product</h2>
-				<form action="saveprod.jsp" method="post">
+				<form id="productForm" action="saveprod.jsp" method="post" enctype="multipart/form-data">
 					<div style="margin-bottom: 10px;">
 						<label for="productName">Product Name:</label>
 						<input type="text" id="productName" name="productName" required style="width: 100%; padding: 8px;">
@@ -63,28 +69,25 @@
 						<input type="number" id="productPrice" name="productPrice" step="0.01" required style="width: 100%; padding: 8px;">
 					</div>
 					<div style="margin-bottom: 10px;">
-						<label for="productdesc">Product description:</label>
-						<input type="text" id="productDesc" name="productDesc" step="0.01" required style="width: 100%; padding: 8px;">
+						<label for="productDesc">Product Description:</label>
+						<input type="text" id="productDesc" name="productDesc" required style="width: 100%; padding: 8px;">
 					</div>
 					<div style="margin-bottom: 10px;">
 						<label for="productCategory">Category:</label>
 						<select id="productCategory" name="productCategory" required style="width: 100%; padding: 8px;">
-							<option value="">Select Category</option>
-							<%
+							<% 
 								try {
 									getConnection();
 									Statement stmt = con.createStatement();
 									ResultSet rs = stmt.executeQuery("SELECT categoryId, categoryName FROM category");
 									while (rs.next()) {
-										int categoryId = rs.getInt("categoryId");
-										String categoryName = rs.getString("categoryName");
 							%>
-							<option value="<%= categoryId %>"><%= categoryName %></option>
-							<%
+							<option value="<%= rs.getInt("categoryId") %>"><%= rs.getString("categoryName") %></option>
+							<% 
 									}
 									rs.close();
-								} catch (SQLException ex) {
-									out.println("<p>Error: " + ex.getMessage() + "</p>");
+								} catch (SQLException e) {
+									out.println("<p>Error loading categories: " + e.getMessage() + "</p>");
 								} finally {
 									closeConnection();
 								}
@@ -95,8 +98,13 @@
 						<label for="productImage">Product Image:</label>
 						<input type="file" id="productImage" name="productImage" accept="image/*" required style="width: 100%; padding: 8px;">
 					</div>
-					<button type="submit" style="background-color: #618244; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Submit</button>
+					<button type="button" id="submitBtn" style="background-color: #618244; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Submit</button>
 				</form>
+				
+				<div id="response" style="margin-top: 10px; color:#618244;"></div>
+				
+
+						
 			</div>
           
 			<div class="form-container" style="align-items: start; text-align: left; width: 35%;">
@@ -200,24 +208,24 @@
 				ResultSet rs = null;
 				if (name.isEmpty() && categoryId == 0) {
 					Statement stmt = con.createStatement();
-					rs = stmt.executeQuery("SELECT product.productId, product.productName, product.productPrice, product.productImageURL FROM product LEFT JOIN orderproduct ON product.productId = orderproduct.productId GROUP BY product.productId,product.productName,product.productPrice,product.productImageURL ORDER BY SUM(orderproduct.quantity) DESC");
+					rs = stmt.executeQuery("SELECT product.productId, product.productName, product.productPrice, product.productImageURL, product.productImage FROM product LEFT JOIN orderproduct ON product.productId = orderproduct.productId GROUP BY product.productId,product.productName,product.productPrice,product.productImageURL,product.productImage ORDER BY SUM(orderproduct.quantity) DESC");
 
 				} else if (name.isEmpty()) {
-					String SQL = "SELECT product.productId, product.productName, product.productPrice, product.productImageURL FROM product LEFT JOIN orderproduct ON product.productId = orderproduct.productId WHERE product.categoryId = ? GROUP BY product.productId,product.productName,product.productPrice,product.productImageURL ORDER BY SUM(orderproduct.quantity) DESC";
+					String SQL = "SELECT product.productId, product.productName, product.productPrice, product.productImageURL,product.productImage FROM product LEFT JOIN orderproduct ON product.productId = orderproduct.productId WHERE product.categoryId = ? GROUP BY product.productId,product.productName,product.productPrice,product.productImageURL,product.productImage ORDER BY SUM(orderproduct.quantity) DESC";
 					PreparedStatement pstmt = con.prepareStatement(SQL);
 					pstmt.setInt(1, categoryId);
 					rs = pstmt.executeQuery();
 
 				} else if (categoryId == 0) {
 					System.out.println("Searching for: " + name);
-					String SQL = "SELECT product.productId, product.productName, product.productPrice, product.productImageURL FROM product LEFT JOIN orderproduct ON product.productId = orderproduct.productId WHERE productName LIKE ? GROUP BY product.productId,product.productName,product.productPrice,product.productImageURL ORDER BY SUM(orderproduct.quantity) DESC";
+					String SQL = "SELECT product.productId, product.productName, product.productPrice, product.productImageURL,product.productImage FROM product LEFT JOIN orderproduct ON product.productId = orderproduct.productId WHERE productName LIKE ? GROUP BY product.productId,product.productName,product.productPrice,product.productImageURL,product.productImage ORDER BY SUM(orderproduct.quantity) DESC";
 					PreparedStatement pstmt = con.prepareStatement(SQL);
 					pstmt.setString(1, "%" + name + "%");
 					rs = pstmt.executeQuery();
 
 				} else {
 					System.out.println("Searching for: " + name + " in category: " + categoryId);
-					String SQL = "SELECT product.productId, product.productName, product.productPrice, product.productImageURL FROM product LEFT JOIN orderproduct ON product.productId = orderproduct.productId WHERE categoryId = ? AND productName LIKE ? GROUP BY product.productId,product.productName,product.productPrice,product.productImageURL ORDER BY SUM(orderproduct.quantity) DESC";
+					String SQL = "SELECT product.productId, product.productName, product.productPrice, product.productImageURL,product.productImage FROM product LEFT JOIN orderproduct ON product.productId = orderproduct.productId WHERE categoryId = ? AND productName LIKE ? GROUP BY product.productId,product.productName,product.productPrice,product.productImageURL,product.productImage ORDER BY SUM(orderproduct.quantity) DESC";
 					PreparedStatement pstmt = con.prepareStatement(SQL);
 					pstmt.setInt(1, categoryId);
 					pstmt.setString(2, "%" + name + "%");
@@ -229,26 +237,41 @@
 			</div>
 			<div class="product-container"> 
 				<%
-					while (rs.next()) {
-						String productId = rs.getString("productId");
-						String productName = rs.getString("productName");
-						String productPrice = rs.getBigDecimal("productPrice").toString();
-						NumberFormat currFormat = NumberFormat.getCurrencyInstance(); 
-						String productImageUrl = rs.getString("productImageURL");
-						if (productImageUrl == null || productImageUrl.trim().isEmpty()) {
-							// Use a default image if no URL is provided
-							productImageUrl = "resources/logo.png";
+				while (rs.next()) {
+					String productId = rs.getString("productId");
+					String productName = rs.getString("productName");
+					String productPrice = rs.getBigDecimal("productPrice").toString();
+					NumberFormat currFormat = NumberFormat.getCurrencyInstance(); 
+					byte[] productImage = rs.getBytes("productImage");
+					String productImageUrl = rs.getString("productImageURL");
+						if (productId == null || productId.isEmpty()) {
+							System.out.println("DEBUG: Found a product with null or empty ID");
+							continue;
 						}
+					
+					
+					String imageSrc;
+					if (productImage != null && productImage.length > 0) {
+						imageSrc = "data:image/jpeg;base64," + java.util.Base64.getEncoder().encodeToString(productImage);
+					} else if (productImageUrl != null && !productImageUrl.trim().isEmpty()) {
+						imageSrc = productImageUrl;
+					} else {
+						imageSrc = "resources/logo.png";
+					}
 					%>
 					<div class="card"> 
-						<img src="<%=productImageUrl%>" alt="<%= productName %>" style="width:100%; height:auto" > 
+						<img src="<%= imageSrc %>" alt="<%= productName %>" style="width: 100%;"> 
 						<div class="card-content">
-							<a href="product.jsp?id=<%=productId%>" class="product-link" style="text-decoration:none;color:black;"><h4><%=productName%></h4></a>
+							<a href="product.jsp?id=<%= productId %>" class="product-link" style="text-decoration:none;color:black;">
+								<h4><%= productName %></h4>
+							</a>
 							<p style="margin-top: 0%;">Price: <%= currFormat.format(rs.getBigDecimal("productPrice")) %></p> 
-							<a href="addcart.jsp?id=<%=productId%>&name=<%=productName%>&price=<%=productPrice%>" style="display:flex; align-items:center;justify-content:center; margin-bottom: 10px;">
-							<img src="resources/button.png" alt="Add to Cart" class="add-to-cart-icon"></a>
+							<a href="addcart.jsp?id=<%= productId %>&name=<%= productName %>&price=<%= productPrice %>" style="display:flex; align-items:center;justify-content:center; margin-bottom: 10px;">
+								<img src="resources/button.png" alt="Add to Cart" class="add-to-cart-icon">
+							</a>
 						</div>
 					</div>
+					
 					<%
 						}
 						rs.close();
@@ -273,5 +296,98 @@
 				closeConnection();
 			}	
 		%>
+		<script>
+			document.getElementById('submitBtn').addEventListener('click', function () {
+    const form = document.getElementById('productForm');
+    const formData = new FormData(form);
+
+    fetch('saveprod.jsp', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            document.getElementById('response').innerHTML = data.error;
+        } else {
+            const productContainer = document.querySelector('.product-container');
+            const card = document.createElement('div');
+            card.classList.add('card');
+
+            const img = document.createElement('img');
+            img.src = `data:image/jpeg;base64,${data.productImage}`;
+            img.alt = data.productName;
+            img.style.width = '100%';
+
+            const cardContent = document.createElement('div');
+            cardContent.classList.add('card-content');
+
+            const nameLink = document.createElement('a');
+            nameLink.href = `product.jsp?id=${data.productId}`;
+            nameLink.className = 'product-link';
+            nameLink.style.textDecoration = 'none';
+            nameLink.style.color = 'black';
+
+            const name = document.createElement('h4');
+            name.textContent = data.productName;
+
+            const price = document.createElement('p');
+            price.textContent = `Price: $${data.productPrice}`;
+
+            const addToCart = document.createElement('a');
+            addToCart.href = `addcart.jsp?id=${data.productId}&name=${data.productName}&price=${data.productPrice}`;
+            addToCart.style.display = 'flex';
+            addToCart.style.alignItems = 'center';
+            addToCart.style.justifyContent = 'center';
+            addToCart.style.marginBottom = '10px';
+
+            const cartIcon = document.createElement('img');
+            cartIcon.src = 'resources/button.png';
+            cartIcon.alt = 'Add to Cart';
+            cartIcon.className = 'add-to-cart-icon';
+
+            nameLink.appendChild(name);
+            cardContent.appendChild(nameLink);
+            cardContent.appendChild(price);
+            addToCart.appendChild(cartIcon);
+            cardContent.appendChild(addToCart);
+            card.appendChild(img);
+            card.appendChild(cardContent);
+
+            productContainer.prepend(card);
+            form.reset();
+            document.getElementById('product-add-container').style.display = 'none';
+            document.getElementById('response').innerHTML = 'Product added successfully!';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('response').innerHTML = 'Error submitting the form.';
+    });
+});				
+		</script>
+<script>
+let isEditMode = false;
+
+function toggleEditMode() {
+    const editToggleBtn = document.getElementById('editToggleBtn');
+    const formContainer = document.getElementById('product-add-container');
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+
+    isEditMode = !isEditMode;
+
+    if (isEditMode) {
+        editToggleBtn.innerHTML = 'Cancel Edit';
+        formContainer.style.display = 'block'; 
+        deleteButtons.forEach(button => button.style.display = 'block');
+    } else {
+        editToggleBtn.innerHTML = 'Edit';
+        formContainer.style.display = 'none'; 
+        deleteButtons.forEach(button => button.style.display = 'none'); 
+		
+    }
+}
+</script>	
+		
 	</body>
 </html>
