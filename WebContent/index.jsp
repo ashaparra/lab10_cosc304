@@ -50,6 +50,7 @@
 			if (admin != null && admin == 1){
 		%>
 			<h2 style="padding-top: 30px;""><a href="admin.jsp" class="menu">Administrators</a></h2>
+			<h2 style="padding-top: 30px;""><a href="warehouse.jsp" class="menu">Inventory</a></h2>
 		<%
 			}
 			
