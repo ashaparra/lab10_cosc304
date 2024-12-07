@@ -20,6 +20,7 @@ services:
             network304:
                 aliases:
                     - cosc304_mysql
+
     cosc304-sqlserver:
         image: mcr.microsoft.com/mssql/server:2019-latest
         container_name: cosc304-sqlserver
@@ -59,6 +60,7 @@ services:
                trap "kill -15 $$pid" SIGTERM
                wait $$pid
                exit 0         
+
     app:
         build:
             context: ./
@@ -75,8 +77,10 @@ services:
                     - cosc304-java
         ports:
             - 80:8080
+
 volumes: 
     cosc304-db:
     mysql-db:
+
 networks:
     network304:

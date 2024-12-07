@@ -2,6 +2,8 @@
 <%@ page import="java.text.NumberFormat" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF8"%>
 <%@ include file="jdbc.jsp" %>
+<%@ page import="java.util.Base64" %>
+<%@page import = "java.lang.System"%>
 
 <!DOCTYPE html>
 <html>
