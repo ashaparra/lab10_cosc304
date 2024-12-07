@@ -1,38 +1,44 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Login Screen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Screen</title>
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
+    <!-- Main container -->
+    <div class="login-container">
+        <!-- Logo Section -->
+        <div class="logo">
+            <img src="resources/logoT.png" alt="Logo" />
+        </div>
 
-<div style="margin:0 auto;text-align:center;display:inline">
+        <!-- Login Form Card -->
+        <div class="login-card">
+            <h2>Log in to Velart</h2>
 
-<h3>Please Login to System</h3>
+            <!-- Display login error message -->
+            <% 
+                if (session.getAttribute("loginMessage") != null) { 
+            %>
+                <p class="error-message"><%= session.getAttribute("loginMessage").toString() %></p>
+            <% } %>
 
-<%
-// Print prior error login message if present
-if (session.getAttribute("loginMessage") != null)
-	out.println("<p>"+session.getAttribute("loginMessage").toString()+"</p>");
-%>
-
-<br>
-<form name="MyForm" method=post action="validateLogin.jsp">
-<table style="display:inline">
-<tr>
-	<td><div align="right"><font face="Arial, Helvetica, sans-serif" size="2">Username:</font></div></td>
-	<td><input type="text" name="username"  size=10 maxlength=10></td>
-</tr>
-<tr>
-	<td><div align="right"><font face="Arial, Helvetica, sans-serif" size="2">Password:</font></div></td>
-	<td><input type="password" name="password" size=10 maxlength="10"></td>
-</tr>
-</table>
-<br/>
-<input class="submit" type="submit" name="Submit2" value="Log In">
-</form>
-
-</div>
-
+            <!-- Login Form -->
+            <form name="MyForm" method="post" action="validateLogin.jsp">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" maxlength="10" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" maxlength="10" required />
+                </div>
+                <button type="submit" class="submit-button">Log In</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
-

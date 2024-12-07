@@ -7,86 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Optional external CSS -->
-    <style>
-        /* Signup Page Styles */
-        .signup-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-            padding: 20px;
-        }
+    <link rel="stylesheet" href="css/createAccount.css">
 
-        .signup-container h1 {
-            font-size: 2rem;
-            color: #618244;
-            margin-bottom: 20px;
-        }
-
-        form {
-            width: 100%;
-            max-width: 400px;
-            background: #d6dfce;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .form-group input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-family: 'Anka/Coder', monospace;
-            font-size: 16px;
-        }
-
-        button {
-            width: 100%;
-            background-color: #618244;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #333;
-        }
-
-        footer a {
-            color: #618244;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 <body>
     <div class="signup-container">
@@ -113,7 +35,7 @@
                 <input type="password" id="confirm-password" name="confirm_password" required>
             </div>
             
-            <button type="submit"><a href="index.jsp">Sign Up</a></button>
+            <button type="submit">Sign Up</button>
 
         <%
         String username = request.getParameter("username");
@@ -145,7 +67,7 @@
                         pstmt.setString(3, password);
                         pstmt.executeUpdate();
                         out.println("<p style='color:green;'>Account created successfully</p>");
-                        response.sendRedirect("index.jsp");
+                        response.sendRedirect("login.jsp");
                         return; // Stop further processing
                     }
                
