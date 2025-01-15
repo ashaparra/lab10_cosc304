@@ -28,7 +28,7 @@ The project focuses on **database normalization**, **security measures**, and **
 ## 🚀 Deployment  
 The project was **deployed on AWS Elastic Beanstalk** with the database hosted on **AWS RDS**.  
 
-🔗 **Live Demo:** _(If live)_  
+🔗 **Live Demo:** [http://lab10velart.us-east-1.elasticbeanstalk.com/index.jsp)
 
 ## 👩‍💻 Authors  
 - **Natalia Valles Villegas**
